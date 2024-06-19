@@ -1112,7 +1112,6 @@ export default Wrapper;
 ```
 
 #### Links
-
 - create src/utils/links.jsx
 
 ```jsx

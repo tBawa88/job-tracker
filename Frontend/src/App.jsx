@@ -13,6 +13,13 @@ import {
 } from './pages'
 import DashBoardLayout from './pages/DashboardLayout'
 
+export const checkDefaultTheme = () => {
+  const isDarkTheme = localStorage.getItem('dark-theme') === 'true';
+  document.body.classList.toggle('dark-theme', isDarkTheme)
+  return isDarkTheme;
+}
+
+
 const router = createBrowserRouter([
   {
     path: '/',
@@ -36,10 +43,26 @@ const router = createBrowserRouter([
         path: 'dashboard',
         element: <DashBoardLayout />,
         children: [
-          { index: true, element: <AddJob /> },
-          { path: 'all-jobs', element: <AllJobs /> },
-          { path: 'stats', element: <Stats /> },
-          { path: 'profile', element: <Profile /> }
+          {
+            index: true,
+            element: <AddJob />
+          },
+          {
+            path: 'all-jobs',
+            element: <AllJobs />
+          },
+          {
+            path: 'stats',
+            element: <Stats />
+          },
+          {
+            path: 'profile',
+            element: <Profile />
+          },
+          {
+            path: 'admin',
+            element: <Admin />
+          }
         ]
       },
     ]
@@ -47,6 +70,8 @@ const router = createBrowserRouter([
 
 
 ])
+
+
 
 
 function App() {
