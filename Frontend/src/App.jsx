@@ -1,10 +1,59 @@
+import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import {
+  ErrorPage,
+  HomeLayout,
+  Landing,
+  Login,
+  Register,
+  AddJob,
+  AllJobs,
+  Stats,
+  Profile,
+  Admin
+} from './pages'
+import DashBoardLayout from './pages/DashboardLayout'
+
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <HomeLayout />,
+    errorElement: <ErrorPage />,
+    children: [
+      {
+        index: true,
+        element: <Landing />
+      },
+      {
+        path: 'login',
+        element: <Login />
+      },
+
+      {
+        path: 'register',
+        element: <Register />
+      },
+      {
+        path: 'dashboard',
+        element: <DashBoardLayout />,
+        children: [
+          { index: true, element: <AddJob /> },
+          { path: 'all-jobs', element: <AllJobs /> },
+          { path: 'stats', element: <Stats /> },
+          { path: 'profile', element: <Profile /> }
+        ]
+      },
+    ]
+  },
+
+
+])
 
 
 function App() {
 
   return (
     <>
-      <h1>Job tracker</h1>
+      <RouterProvider router={ router } />
     </>
   )
 }

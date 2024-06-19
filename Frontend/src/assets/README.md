@@ -100,6 +100,8 @@ npm i react-router-dom@6.10.0
 ```
 
 App.jsx
+Loaders allow us to fetch the data. That data can be accessed inside the components defined on that route
+Actions are for form submissions. Can be triggered either by a form, or by using useSubmit() hook
 
 ```jsx
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
@@ -366,10 +368,7 @@ const El = styled.el`
   // styles go here
 `;
 ```
-
-- no name collisions, since unique class
-- vscode-styled-components extension
-- colors and bugs
+- Uses the tagged function syntax of javscript 'styled.e1(strings, values)'
 
 Landing.jsx
 
