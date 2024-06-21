@@ -34,3 +34,12 @@ export class UnauthorizedError extends Error {
         this.status = StatusCodes.FORBIDDEN
     }
 }
+
+export class InvalidInput extends Error {
+    constructor (message, errors = undefined) {
+        super(message);
+        this.message = message;
+        this.status = StatusCodes.UNPROCESSABLE_ENTITY;
+        this.errors = errors;
+    }
+}

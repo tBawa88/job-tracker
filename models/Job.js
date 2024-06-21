@@ -3,6 +3,10 @@ import { JOB_STATUS, JOB_TYPE } from "../utils/constants.js";
 
 
 const jobSchema = new Schema({
+    ownerId: {
+        type: mongoose.Types.ObjectId,
+        ref: 'User'
+    },
     company: String,
     position: String,
     jobStatus: {

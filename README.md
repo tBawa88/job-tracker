@@ -3343,7 +3343,8 @@ export const getCurrentUser = async (req, res) => {
 };
 ```
 
-#### Remove Password
+#### Remove Password 
+<!-- cannot send the user password to frontend -->
 
 models/UserModel.js
 
@@ -3351,7 +3352,7 @@ models/UserModel.js
 UserSchema.methods.toJSON = function () {
   var obj = this.toObject();
   delete obj.password;
-  return obj;
+  return obj; 
 };
 ```
 

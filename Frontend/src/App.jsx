@@ -19,7 +19,6 @@ export const checkDefaultTheme = () => {
   return isDarkTheme;
 }
 
-
 const router = createBrowserRouter([
   {
     path: '/',
@@ -75,7 +74,6 @@ const router = createBrowserRouter([
 
 
 function App() {
-
   return (
     <>
       <RouterProvider router={ router } />

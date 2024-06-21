@@ -1,6 +1,8 @@
 import { Router } from "express";
-import { AuthError } from "../utils/errorClasses.js";
 const router = Router();
+import validateJob from "../middleware/validateJob.js";
+import validateIdAndOwner from "../middleware/validateJobId.js";
+import checkUserLoggedIn from "../middleware/checkAuth.js";
 import {
     getAllJobs,
     getJob,
@@ -8,19 +10,23 @@ import {
     editJob,
     deletejob
 } from '../controllers/jobController.js'
-//TODO : move code into controllers
+
+
+//All routes will require auth 
+//every route handler here, will have access to req.user = {userId, role}
+router.use(checkUserLoggedIn);
+
 router.get('/', getAllJobs)
 
-router.get('/:id', getJob)
+router.get('/:id', validateIdAndOwner, getJob)
 
 
-///these routes will require auth
 
-router.post('/', createJob)
+router.post('/', validateJob, createJob)
 
 
-router.patch('/:id', editJob)
+router.patch('/:id', validateIdAndOwner, validateJob, editJob)
 
-router.delete('/:id', deletejob)
+router.delete('/:id', validateIdAndOwner, deletejob)
 
 export default router
