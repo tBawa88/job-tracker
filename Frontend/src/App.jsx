@@ -2,6 +2,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import { QueryClientProvider } from '@tanstack/react-query'
 import { queryClient } from './utils/customFetch'
 import {
+  DashboardLayout,
   ErrorPage,
   HomeLayout,
   Landing,
@@ -13,7 +14,8 @@ import {
   Profile,
   Admin
 } from './pages'
-import DashBoardLayout from './pages/DashboardLayout'
+import { action as registerAction } from './pages/Register'
+
 
 export const checkDefaultTheme = () => {
   const isDarkTheme = localStorage.getItem('dark-theme') === 'true';
@@ -38,11 +40,12 @@ const router = createBrowserRouter([
 
       {
         path: 'register',
-        element: <Register />
+        element: <Register />,
+        action: registerAction
       },
       {
         path: 'dashboard',
-        element: <DashBoardLayout />,
+        element: <DashboardLayout />,
         children: [
           {
             index: true,

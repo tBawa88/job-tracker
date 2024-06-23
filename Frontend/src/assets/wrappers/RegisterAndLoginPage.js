@@ -32,5 +32,13 @@ const Wrapper = styled.section`
     margin-left: 0.3rem;
     letter-spacing: var(--letter-spacing);
   }
+  .invalid {
+    font-size: 0.9rem;
+    color: red;
+  }
+  .valid {
+    font-size: 0.9rem;
+    color : rgb(49, 196, 64);
+  }
 `;
 export default Wrapper;
