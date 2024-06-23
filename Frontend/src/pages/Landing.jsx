@@ -14,9 +14,9 @@ const Landing = () => {
                 <div className="info">
                     <h1>job <span>tracking</span> app</h1>
                     <p>
-                        { `Are you tired of losing track of your job applications? Do you struggle to remember which companies
+                        Are you tired of losing track of your job applications? Do you struggle to remember which companies
                         you've applied to, when you submitted your resume, or when you should follow up?
-                        JobTracker is here to help!`}
+                        <span className='tag'> Jobify</span> is here to help!
                     </p>
                     <Link to='register' className='btn register-link'>
                         Register

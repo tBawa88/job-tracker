@@ -3,7 +3,6 @@ import { createRequire } from 'module'
 import morgan from 'morgan';
 import cookieParser from 'cookie-parser';
 import * as dotenv from 'dotenv'
-const require = createRequire(import.meta.url);
 import mongoose from 'mongoose';
 import jobRouter from './routes/job.js'
 import authRouter from './routes/auth.js'
@@ -24,7 +23,6 @@ app.use(cookieParser());
 //     next();
 // });
 
-//connecting to mongo using global await
 try {
     await mongoose.connect(process.env.MONGO_URI || '');
     console.log('Connected to DB')

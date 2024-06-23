@@ -1,4 +1,4 @@
-import idSchema from "../schemas/jobIdValidation.js";
+import idSchema from "../schemas/mongooseIdValidation.js";
 import { AuthError, InvalidInput, NotFoundError } from "../utils/errorClasses.js";
 import Job from "../models/Job.js";
 import 'express-async-errors'

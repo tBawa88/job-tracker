@@ -10,6 +10,11 @@ const Wrapper = styled.section`
     align-items: center;
   }
 
+  .tag {
+    font-weight: 500;
+    color: var(--primary-500);
+  }
+
   .page{
     min-height: calc(100vh - var(--nav-height));
     display: grid;

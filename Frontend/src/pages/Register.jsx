@@ -3,6 +3,7 @@ import { Logo, FormRow } from "../components"
 import Wrapper from "../assets/wrappers/RegisterAndLoginPage"
 
 const Register = () => {
+
     return <Wrapper>
         <Form className='form'>
             <Logo />
@@ -17,20 +18,20 @@ const Register = () => {
                 className='form-input'
             />
             <FormRow
-                label='last name'
-                name='lastName'
-                type='text'
-                id='lastName'
-                defaultValue='doe'
-                required
-                className='form-input'
-            />
-            <FormRow
                 label='email'
                 name='email'
                 type='email'
                 id='email'
                 defaultValue='john@gmail.com'
+                required
+                className='form-input'
+            />
+            <FormRow
+                label='location'
+                name='location'
+                type='location'
+                id='location'
+                defaultValue='city'
                 required
                 className='form-input'
             />
@@ -53,3 +54,5 @@ const Register = () => {
     </Wrapper>
 }
 export default Register
+
+export const action = async () => { }
