@@ -1,16 +1,27 @@
-import { Outlet } from "react-router-dom"
+import { Outlet, redirect, useSubmit, } from "react-router-dom"
 import Wrapper from '../assets/wrappers/Dashboard'
 import { BigSidebar, SmallSidbar, Navbar } from "../components"
 import { useState, createContext, useContext } from "react"
 import { checkDefaultTheme } from "../App"
+import { useQuery } from "@tanstack/react-query"
+import { getCurrentUser } from "../utils/httpHelpers"
+import customFetch from "../utils/customFetch"
+import { toast } from "react-toastify"
+
 const DashboardContext = createContext();
 
 const DashBoardLayout = () => {
-
-    //temp, later this will come from server
-    const user = { name: 'john' }
+    const submit = useSubmit();
     const [showSidebar, setShowSidbar] = useState(false)
     const [isDarkTheme, setIsDarkTheme] = useState(checkDefaultTheme())
+
+    const { data, } = useQuery({
+        queryKey: ['user'],
+        queryFn: getCurrentUser,
+        staleTime: 5000
+    })
+    const user = data ? data : { name: undefined };
+
 
     const toggleDarkTheme = () => {
         const newDarkTheme = !isDarkTheme;
@@ -26,6 +37,7 @@ const DashBoardLayout = () => {
     }
     const logoutUser = async () => {
         console.log("user logged out")
+        submit(null, { method: 'POST', action: '/logout' })
     }
 
     return <Wrapper>
@@ -56,3 +68,29 @@ const DashBoardLayout = () => {
 
 export const useDashboardContext = () => useContext(DashboardContext);
 export default DashBoardLayout
+
+
+export const loader = async () => {
+    try {
+        const response = await customFetch.get('/auth/status');
+        if (!response.data.authenticated) {
+            toast.error("User not Logged in", { autoClose: 2000 })
+            return redirect('/login')
+        }
+        return null;
+    } catch (error) {
+        toast.error("Error while checking user status, Pls Login")
+        return redirect('/login')
+    }
+}
+
+export const action = async () => {
+    try {
+        const response = await customFetch.post('/auth/logout');
+        toast.success('Logged Out')
+        return redirect('/login')
+    } catch (error) {
+        toast.error('Error loggin out')
+        return null;
+    }
+}

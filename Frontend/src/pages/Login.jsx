@@ -1,10 +1,13 @@
-import { Link, Form } from "react-router-dom"
+import { Link, Form, redirect, json } from "react-router-dom"
 import Wrapper from "../assets/wrappers/RegisterAndLoginPage"
 import { FormRow, Logo } from "../components"
+import customFetch from "../utils/customFetch"
+import { toast } from "react-toastify"
+
 
 const Login = () => {
     return <Wrapper>
-        <Form className="form">
+        <Form className="form" method="POST">
             <Logo />
             <h4>Login</h4>
             <FormRow
@@ -12,16 +15,14 @@ const Login = () => {
                 name='email'
                 type='email'
                 id='email'
-                defaultValue='john@gmail.com'
                 required
                 className='form-input'
             />
             <FormRow
-                label='email'
-                name='email'
-                type='email'
-                id='email'
-                defaultValue='john@gmail.com'
+                label='password'
+                name='password'
+                type='password'
+                id='password'
                 required
                 className='form-input'
             />
@@ -40,3 +41,19 @@ const Login = () => {
 
 }
 export default Login
+
+
+export const action = async ({ request, params }) => {
+    const formData = await request.formData();
+    const user = Object.fromEntries(formData);
+    try {
+        const response = await customFetch.post('/auth/login', { ...user });
+        toast.success(`Welcome back, ${response.data.username}`)
+        return redirect('/dashboard')
+    } catch (error) {
+        console.log("Error occured while logging in ", error)
+        toast.error("Error loggin in, Try again later")
+        return null
+    }
+    return null;
+}

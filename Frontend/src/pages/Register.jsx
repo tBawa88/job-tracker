@@ -1,10 +1,13 @@
-import { Link, Form, redirect } from "react-router-dom"
+import { Link, Form, redirect, useNavigation } from "react-router-dom"
 import { Logo, FormRow } from "../components"
 import Wrapper from "../assets/wrappers/RegisterAndLoginPage"
 import customFetch from "../utils/customFetch"
 import useValidateCredentials from "../hooks/useValidateCredentials"
+import { toast } from "react-toastify"
+
 
 const Register = () => {
+    const { state } = useNavigation();
     const {
         usernameErrorMessage,
         passwordErrorMessage,
@@ -82,7 +85,12 @@ const Register = () => {
                 handlePassword={ handlePassword }
             />
 
-            <button type="submit" className="btn btn-block" disabled={ (isUsernameInvalid || isPasswordInvalid) }>Submit</button>
+            <button type="submit"
+                className="btn btn-block"
+                disabled={ isUsernameInvalid || isPasswordInvalid || state === 'submitting' }
+            >
+                { state === 'submitting' ? 'Submitting ...' : 'Submit' }
+            </button>
             <p>
                 Already a member?
                 <Link to='/login' className="member-btn">Login</Link>
@@ -98,8 +106,10 @@ export const action = async ({ request, params }) => {
     try {
         const response = await customFetch.post('/auth/register', { ...newUser })
         console.log(response.data)
+        toast.success('Registration successful :)')
         return redirect('/dashboard')
     } catch (error) {
+        toast.error('Registration failed :(')
         console.log(error.response);
         return null;
     }

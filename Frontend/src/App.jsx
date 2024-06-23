@@ -1,6 +1,8 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import { QueryClientProvider } from '@tanstack/react-query'
 import { queryClient } from './utils/customFetch'
+import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer } from 'react-toastify';
 import {
   DashboardLayout,
   ErrorPage,
@@ -15,7 +17,9 @@ import {
   Admin
 } from './pages'
 import { action as registerAction } from './pages/Register'
-
+import { action as loginAction } from './pages/Login';
+import { action as logoutAction } from './pages/DashboardLayout';
+import { loader as dashboardLoader } from './pages/DashboardLayout'
 
 export const checkDefaultTheme = () => {
   const isDarkTheme = localStorage.getItem('dark-theme') === 'true';
@@ -35,7 +39,12 @@ const router = createBrowserRouter([
       },
       {
         path: 'login',
-        element: <Login />
+        element: <Login />,
+        action: loginAction
+      },
+      {
+        path: 'logout',
+        action: logoutAction
       },
 
       {
@@ -46,6 +55,7 @@ const router = createBrowserRouter([
       {
         path: 'dashboard',
         element: <DashboardLayout />,
+        loader: dashboardLoader,
         children: [
           {
             index: true,
@@ -83,6 +93,7 @@ function App() {
     <>
       <QueryClientProvider client={ queryClient }>
         <RouterProvider router={ router } />
+        <ToastContainer position='top-right' />
       </QueryClientProvider>
     </>
   )

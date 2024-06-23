@@ -26,7 +26,7 @@ export const registerUser = async (req, res, next) => {
 
 export const loginUser = async (req, res, next) => {
     const user = await User.findOne({ email: req.body.email })
-    const isValidUser = user && (await verifyPassword(req.body.password, user.password)) //refactor : checking user exisits and correct password in one go
+    const isValidUser = user && (await verifyPassword(req.body.password, user.password))
     if (!isValidUser)
         throw new AuthError('Invalid email or password')
     const token = generateToken({ userId: user._id, role: user.role });
@@ -35,7 +35,7 @@ export const loginUser = async (req, res, next) => {
         expires: new Date(Date.now() + ONE_DAY),
         secure: process.env.NODE_ENV === 'production',
     });
-    return res.status(StatusCodes.OK).json({ success: true, message: 'User logged in successfully' })
+    return res.status(StatusCodes.OK).json({ success: true, message: 'User logged in successfully', username: user.name })
 }
 
 
@@ -46,4 +46,11 @@ export const logoutUser = async (req, res, next) => {
         expires: new Date(Date.now()),
     });
     res.status(StatusCodes.OK).json({ msg: 'user logged out!' });
+}
+
+export const currentStatus = async (req, res, next) => {
+    const { token } = req.cookies;
+    if (!token)
+        return res.status(StatusCodes.OK).json({ authenticated: false })
+    res.status(StatusCodes.OK).json({ authenticated: true })
 }
