@@ -15,12 +15,12 @@ const DashBoardLayout = () => {
     const [showSidebar, setShowSidbar] = useState(false)
     const [isDarkTheme, setIsDarkTheme] = useState(checkDefaultTheme())
 
-    const { data, } = useQuery({
+    const { data: userData, } = useQuery({
         queryKey: ['user'],
         queryFn: getCurrentUser,
         staleTime: 5000
     })
-    const user = data ? data : { name: undefined };
+    const user = userData ? userData : { name: undefined };
 
 
     const toggleDarkTheme = () => {
@@ -28,7 +28,6 @@ const DashBoardLayout = () => {
         setIsDarkTheme(newDarkTheme);
         document.body.classList.toggle('dark-theme', newDarkTheme)
         localStorage.setItem('dark-theme', newDarkTheme)
-        console.log("dark theme toggled")
 
     }
 
@@ -36,7 +35,6 @@ const DashBoardLayout = () => {
         setShowSidbar(oldState => !oldState)
     }
     const logoutUser = async () => {
-        console.log("user logged out")
         submit(null, { method: 'POST', action: '/logout' })
     }
 
@@ -57,7 +55,7 @@ const DashBoardLayout = () => {
                 <div >
                     <Navbar />
                     <div className="dashboard-page">
-                        <Outlet />
+                        <Outlet context={ user } />
                     </div>
                 </div>
             </main>

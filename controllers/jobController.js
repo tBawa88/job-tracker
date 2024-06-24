@@ -2,13 +2,10 @@ import Job from "../models/Job.js";
 import { StatusCodes } from 'http-status-codes'
 import 'express-async-errors'
 
-//not using trycatch, using express-async-error to catch the async errors
-//moved the NotFoundError handling logic in 'validateJobId' middleware
 
 export const createJob = async (req, res, next) => {
-    const { company, position } = req.body;
     const { userId } = req.user;
-    const newJob = new Job({ company, position });
+    const newJob = new Job(req.body);
     newJob.ownerId = userId;    //add id of the owner (current user)
     await newJob.save();
     res.status(StatusCodes.CREATED).json({ success: true, message: 'Successfully created new job', job: newJob })

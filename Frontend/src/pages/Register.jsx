@@ -100,12 +100,26 @@ const Register = () => {
 }
 export default Register
 
+
+export const loader = async () => {
+    try {
+        const response = await customFetch.get('/auth/status');
+        if (response.data.authenticated) {
+            toast.error("User needs to logout first", { autoClose: 1000 })
+            return redirect('/dashboard')
+        }
+        return null;
+    } catch (error) {
+        toast.error("Error while checking user status, Pls Login")
+        return redirect('/login')
+    }
+}
+
 export const action = async ({ request, params }) => {
     const formData = await request.formData();
     const newUser = Object.fromEntries(formData)
     try {
         const response = await customFetch.post('/auth/register', { ...newUser })
-        console.log(response.data)
         toast.success('Registration successful :)')
         return redirect('/dashboard')
     } catch (error) {
