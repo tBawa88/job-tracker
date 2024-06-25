@@ -15,7 +15,6 @@ export const getCurrentUser = async (req, res, next) => {
 //after uploading the file, delete the image from disk storage
 //also delete the old image stored at cloudinary as well since it has no use anymore 
 export const updateUser = async (req, res, next) => {
-    console.log("File received from frontend ", req.file)
     const newUser = { ...req.body };
     if (req.file) {
         const uploadResult = await cloudinary.uploader.upload(req.file.path);

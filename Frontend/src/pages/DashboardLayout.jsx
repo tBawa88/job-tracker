@@ -29,7 +29,10 @@ const DashBoardLayout = () => {
     const { data: userData, } = useQuery({
         queryKey: ['user'],
         queryFn: getCurrentUser,
-        staleTime: 5000
+        staleTime: 5000,
+        onError: () => {
+            submit(null, { method: 'POST', action: '/logout' })
+        }
     })
     const user = userData ? userData : { name: undefined };
     const toggleDarkTheme = () => {
@@ -82,10 +85,12 @@ export const loader = async () => {
         const response = await customFetch.get('/auth/status');
         if (!response.data.authenticated) {
             toast.error("User not Logged in", { autoClose: 2000 })
+            console.log("User not logged in")
             return redirect('/login')
         }
         return null;
     } catch (error) {
+        console.log("User not logged in")
         toast.error("Error while checking user status, Pls Login")
         return redirect('/login')
     }
@@ -93,7 +98,7 @@ export const loader = async () => {
 
 export const action = async () => {
     try {
-        const response = await customFetch.post('/auth/logout');
+        await customFetch.post('/auth/logout');
         toast.success('Logged Out')
         return redirect('/login')
     } catch (error) {

@@ -6,7 +6,6 @@ import 'express-async-errors'
 
 const checkUserLoggedIn = (req, res, next) => {
     const { token } = req.cookies;
-
     if (!token) {
         throw new AuthError('User not authenticated')
     }

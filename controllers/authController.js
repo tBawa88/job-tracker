@@ -2,7 +2,7 @@ import User from '../models/User.js'
 import { StatusCodes } from 'http-status-codes';
 import { hashPassword, verifyPassword } from '../utils/passwordUtil.js';
 import { AuthError } from '../utils/errorClasses.js';
-import { generateToken } from '../utils/tokenUtils.js';
+import { generateToken, verifyToken } from '../utils/tokenUtils.js';
 
 import 'express-async-errors'
 const ONE_DAY = 24 * 60 * 60 * 1000;

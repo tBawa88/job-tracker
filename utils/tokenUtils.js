@@ -1,5 +1,4 @@
 import jwt from 'jsonwebtoken';
-import { AuthError, ServerError } from './errorClasses.js';
 
 export const generateToken = (user) => {
     return jwt.sign({ user }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES_IN })

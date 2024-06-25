@@ -1,10 +1,10 @@
 import { FormRow } from '../components';
 import Wrapper from '../assets/wrappers/DashboardFormPage';
-import { useNavigation, Form, useOutletContext } from 'react-router-dom';
+import { useNavigation, Form, } from 'react-router-dom';
 import { useDashboardContext } from './DashboardLayout';
 import customFetch from '../utils/customFetch';
 import { toast } from 'react-toastify';
-
+import { queryClient } from '../utils/customFetch';
 
 const Profile = () => {
     const { user } = useDashboardContext();
@@ -69,6 +69,7 @@ export const action = async ({ request }) => {
     try {
         await customFetch.patch('/users/update-user', formData)
         toast.success('User info updated')
+        queryClient.invalidateQueries({ queryKey: ['user'] })
     } catch (error) {
         const message = error?.response?.data?.message || 'Something went wrong while updating user info'
         toast.error(message)

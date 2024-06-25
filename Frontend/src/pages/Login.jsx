@@ -68,5 +68,4 @@ export const action = async ({ request, params }) => {
         toast.error(message)
         return null
     }
-    return null;
 }
