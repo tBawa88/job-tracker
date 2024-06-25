@@ -7,8 +7,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "server": "nodemon server.js",
-    "client": "cd frontend && npm run dev",
-    "setup-project": "npm i && cd client && npm i"
+    "client": "cd Frontend && npm run dev",
+    "setup-project": "npm i && npm run client",
+    "setup-prod": "npm i && cd Frontend && npm i && npm run build"
   },
   "keywords": [],
   "author": "",

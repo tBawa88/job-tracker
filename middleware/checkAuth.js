@@ -13,7 +13,6 @@ const checkUserLoggedIn = (req, res, next) => {
     try {
         const { userId, role } = verifyToken(token).user
         req.user = { userId, role }
-        console.log("current userid and role => ", req.user)
     } catch (error) {
         throw new AuthError("User not authenticated")
     }
