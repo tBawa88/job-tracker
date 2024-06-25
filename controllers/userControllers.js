@@ -3,7 +3,7 @@ import User from "../models/User.js"
 import Job from "../models/Job.js"
 import 'express-async-errors'
 import { v2 as cloudinary } from 'cloudinary'
-import { promises as fs } from 'fs'
+import { formatImage } from "../middleware/multerMiddleware.js"
 
 export const getCurrentUser = async (req, res, next) => {
     const user = await User.findById(req.user.userId);
@@ -17,8 +17,8 @@ export const getCurrentUser = async (req, res, next) => {
 export const updateUser = async (req, res, next) => {
     const newUser = { ...req.body };
     if (req.file) {
-        const uploadResult = await cloudinary.uploader.upload(req.file.path);
-        await fs.unlink(req.file.path);
+        const file = formatImage(req.file)
+        const uploadResult = await cloudinary.uploader.upload(file);
         newUser.avatar = uploadResult.secure_url;
         newUser.avatarPublicId = uploadResult.public_id
     }

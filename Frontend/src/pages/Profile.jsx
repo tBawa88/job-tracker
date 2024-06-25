@@ -28,6 +28,7 @@ const Profile = () => {
                     />
                 </div>
                 <FormRow
+                    label='name'
                     type='text'
                     name='name'
                     className='form-input'
@@ -35,11 +36,13 @@ const Profile = () => {
                 />
 
                 <FormRow
+                    label='email'
                     type='email'
                     name='email'
                     className='form-input'
                     defaultValue={ user.email } />
                 <FormRow
+                    label='location'
                     type='text'
                     name='location'
                     className='form-input'
