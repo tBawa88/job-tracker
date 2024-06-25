@@ -1,17 +1,28 @@
 import { Outlet, redirect, useSubmit, } from "react-router-dom"
 import Wrapper from '../assets/wrappers/Dashboard'
 import { BigSidebar, SmallSidbar, Navbar } from "../components"
-import { useState, createContext, useContext } from "react"
+import { useState, useEffect, createContext, useContext } from "react"
 import { checkDefaultTheme } from "../App"
 import { useQuery } from "@tanstack/react-query"
 import { getCurrentUser } from "../utils/httpHelpers"
 import customFetch from "../utils/customFetch"
 import { toast } from "react-toastify"
 
-const DashboardContext = createContext();
 
+const DashboardContext = createContext();
+let firstMount = true;
+const ONE_DAY = 24 * 60 * 60 * 1000;
 const DashBoardLayout = () => {
     const submit = useSubmit();
+    useEffect(() => {
+        if (!firstMount)
+            return;
+        firstMount = false;
+        setTimeout(() => {  //auto logout after one day
+            logoutUser();
+        }, ONE_DAY)
+    });
+
     const [showSidebar, setShowSidbar] = useState(false)
     const [isDarkTheme, setIsDarkTheme] = useState(checkDefaultTheme())
 
@@ -21,8 +32,6 @@ const DashBoardLayout = () => {
         staleTime: 5000
     })
     const user = userData ? userData : { name: undefined };
-
-
     const toggleDarkTheme = () => {
         const newDarkTheme = !isDarkTheme;
         setIsDarkTheme(newDarkTheme);

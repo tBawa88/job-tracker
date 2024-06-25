@@ -64,8 +64,8 @@ export const action = async ({ request, params }) => {
         toast.success(`Welcome back, ${response.data.username}`)
         return redirect('/dashboard')
     } catch (error) {
-        console.log("Error occured while logging in ", error)
-        toast.error("Error loggin in, Try again later")
+        const message = error.response.data.message || 'Error Loggin in'
+        toast.error(message)
         return null
     }
     return null;
