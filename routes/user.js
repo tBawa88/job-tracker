@@ -3,14 +3,16 @@ import { getCurrentUser, updateUser, getApplicationStats } from "../controllers/
 import checkAdmin from "../middleware/checkAdmin.js";
 import validateUpdateUserInfo from "../middleware/validateUpdateUser.js";
 import isUpdatePossible from "../middleware/isUpdatePossible.js";
+import checkUserLoggedIn from "../middleware/checkAuth.js";
+import upload from "../middleware/multerMiddleware.js";
 const router = Router();
 
+
+router.use(checkUserLoggedIn);
 //all these routes will have user{userID, role} attaches onto the req object
 router.get('/current-user', getCurrentUser)
 
-//need to check if the email of the current logged in user was updated or not
-//and if it was, then make sure that it does not already exist
-router.get('/update-user', validateUpdateUserInfo, isUpdatePossible, updateUser)
+router.patch('/update-user', upload.single('avatar'), validateUpdateUserInfo, isUpdatePossible, updateUser)
 
 router.get('/admin/app-stats', checkAdmin, getApplicationStats)
 

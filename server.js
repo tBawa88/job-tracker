@@ -1,20 +1,36 @@
 import express from 'express'
-import { createRequire } from 'module'
 import morgan from 'morgan';
 import cookieParser from 'cookie-parser';
 import * as dotenv from 'dotenv'
 import mongoose from 'mongoose';
+import { v2 as cloudinary } from 'cloudinary'
+//routes
 import jobRouter from './routes/job.js'
 import authRouter from './routes/auth.js'
 import userRouter from './routes/user.js'
-import checkUserLoggedIn from './middleware/checkAuth.js';
+//path to public
+import { dirname } from 'path'
+import { fileURLToPath } from 'url';
+import path from 'path';
+
 import 'express-async-errors' //to handle the async erros (no need to use trycatch)
 
 dotenv.config();
+
+cloudinary.config({
+    cloud_name: process.env.CLOUDNRY_NAME,
+    api_key: process.env.CLOUDNRY_API_KEY,
+    api_secret: process.env.CLOUDNRY_API_SECRET,
+});
+
 const app = express();
 
+const __dirname = dirname(fileURLToPath(import.meta.url))
+app.use(express.static(path.resolve(__dirname, './public')))
 app.use(express.json());
 app.use(cookieParser());
+if (process.env.NODE_ENV === 'development')
+    app.use(morgan('dev'))
 
 // app.use((req, res, next) => {
 //     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -29,14 +45,13 @@ try {
 } catch (error) {
     console.log("Error while connecting to mongo db ->>>>>", error)
 }
-if (process.env.NODE_ENV === 'development')
-    app.use(morgan('dev'))
+
 
 //routes
 app.get('/', (req, res) => { res.send('hello world') })
 app.use('/api/jobs', jobRouter);
 app.use('/api/auth', authRouter);
-app.use('/api/users', checkUserLoggedIn, userRouter)
+app.use('/api/users', userRouter)
 
 
 //404 route catcher MW

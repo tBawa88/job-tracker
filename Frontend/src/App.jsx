@@ -17,11 +17,12 @@ import {
   Admin,
   EditJob
 } from './pages'
-import { loader as registerLoader } from './pages/Register';
 import { action as registerAction } from './pages/Register'
 import { action as loginAction } from './pages/Login';
-import { loader as loginLoader } from './pages/Login'
 import { action as logoutAction } from './pages/DashboardLayout';
+import { action as updateProfileAction } from './pages/Profile';
+import { loader as registerLoader } from './pages/Register';
+import { loader as loginLoader } from './pages/Login'
 import { loader as dashboardLoader } from './pages/DashboardLayout'
 import { loader as adminLoader } from './pages/Admin'
 // import { action as addJobAction } from './pages/AddJob';
@@ -82,7 +83,8 @@ const router = createBrowserRouter([
           },
           {
             path: 'profile',
-            element: <Profile />
+            element: <Profile />,
+            action: updateProfileAction
           },
           {
             path: 'admin',

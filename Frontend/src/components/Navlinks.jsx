@@ -9,30 +9,18 @@ const Navlinks = ({ isBigSidebar }) => {
         <div className="nav-links">
             {
                 links.map(link => {
-                    if (link.text !== 'admin')
-                        return (<NavLink
-                            className={ ({ isActive }) => (isActive ? 'nav-link active' : 'nav-link') }
-                            key={ link.text }
-                            onClick={ !isBigSidebar ? toggleSidebar : null }
-                            to={ link.path }
-                            end
-                        >
-                            <span className='icon'> { link.icon }</span>
-
-                            { link.text }
-                        </NavLink>)
-                    if (link.text === 'admin' && isAdmin)
-                        return (<NavLink
-                            className={ ({ isActive }) => (isActive ? 'nav-link active' : 'nav-link') }
-                            key={ link.text }
-                            onClick={ !isBigSidebar ? toggleSidebar : null }
-                            to={ link.path }
-                            end
-                        >
-                            <span className='icon'> { link.icon }</span>
-
-                            { link.text }
-                        </NavLink>)
+                    if (link.text === 'admin' && !isAdmin)
+                        return;
+                    return (<NavLink
+                        className={ ({ isActive }) => (isActive ? 'nav-link active' : 'nav-link') }
+                        key={ link.text }
+                        onClick={ !isBigSidebar ? toggleSidebar : null }
+                        to={ link.path }
+                        end
+                    >
+                        <span className='icon'> { link.icon }</span>
+                        { link.text }
+                    </NavLink>)
                 })
             }
         </div>

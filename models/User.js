@@ -12,7 +12,9 @@ const userSchema = new Schema({
         type: String,
         enum: ['user', 'admin'],
         default: 'user'
-    }
+    },
+    avatar: String,
+    avatarPublicId: String
 })
 
 //defining a custom method on model instances (documents), to obtain current document without the password property

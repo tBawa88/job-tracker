@@ -6,7 +6,7 @@ const validateUpdateUser = (req, res, next) => {
     try {
         if (!result.success) {
             const errors = result.error.errors.map(err => ({ property: err.path, msg: err.message }))
-            console.log(errors)
+            console.log('User update validatoin error -> ', errors)
             throw new InvalidInput('Invalid input for registration', errors)
         }
     } catch (error) {

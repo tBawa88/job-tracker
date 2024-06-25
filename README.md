@@ -4907,7 +4907,6 @@ export default Profile;
 ```js
 export const action = async ({ request }) => {
   const formData = await request.formData();
-
   const file = formData.get('avatar');
   if (file && file.size > 500000) {
     toast.error('Image size too large');
@@ -4932,6 +4931,8 @@ npm i multer@1.4.5
 
 Multer is a popular middleware package for handling multipart/form-data in Node.js web applications. It is commonly used for handling file uploads. Multer simplifies the process of accepting and storing files submitted through HTTP requests by providing an easy-to-use API. It integrates seamlessly with Express.js and allows developers to define upload destinations, file size limits, and other configurations.
 
+What Multer does is, it adds a **file** or **files** object on the request object in an Express middlware. It also appends the req.body object with the text fields of the Form. We can directly send the raw formData object since multer MW will parse it for us. So multer middlware should the first layer of middlware in our update route handler.
+
 - create middleware/multerMiddleware.js
 - setup multer
 
@@ -4944,8 +4945,8 @@ const storage = multer.diskStorage({
     cb(null, 'public/uploads');
   },
   filename: (req, file, cb) => {
-    const fileName = file.originalname;
-    // set the name of the uploaded file
+    const fileName = file.originalname; 
+    //   set the name of the uploaded file
     cb(null, fileName);
   },
 });

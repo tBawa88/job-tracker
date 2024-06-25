@@ -7,7 +7,7 @@ const Wrapper = styled.div`
   align-items: center;
   justify-content: center;
   gap: 0 0.5rem;
-  padding : 0.5rem
+  padding : 0.5rem;
  }
  .img{
   width: 25px;
@@ -19,6 +19,7 @@ const Wrapper = styled.div`
   top: 40px;
   left: 0;
   width: 100%;
+  margin-top: 0.75rem;
   text-align: center;
   visibility: hidden;
   box-shadow: var(--shadow-2);
