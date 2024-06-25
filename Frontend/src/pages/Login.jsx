@@ -29,9 +29,6 @@ const Login = () => {
             <button type="submit" className="btn btn-block">
                 Login
             </button>
-            <button type="button" className="btn btn-block">
-                Explore the app
-            </button>
             <p>
                 Not a memeber yet?
                 <Link to='/register' className="member-btn">Register</Link>

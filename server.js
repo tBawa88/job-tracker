@@ -53,7 +53,9 @@ app.use('/api/jobs', jobRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/users', userRouter)
 
-
+app.get('*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, './public/index.html'))
+})
 //404 route catcher MW
 app.use('*', (req, res, next) => {
     res.status(404).json({ success: false, message: 'Resource not found' });
