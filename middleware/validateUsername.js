@@ -14,7 +14,6 @@ const validateUsername = async (req, res, next) => {
     const result = username.safeParse(name);
     if (!result.success) {
         const errorMessage = result.error.errors[0].message;
-        console.log(errorMessage)
         return res.status(StatusCodes.IM_A_TEAPOT).json({ message: errorMessage })
     }
 

@@ -1,5 +1,5 @@
 import { Link, Form, redirect, useNavigation } from "react-router-dom"
-import { Logo, FormRow } from "../components"
+import { Logo, FormRow, SubmitButton, ErrorText } from "../components"
 import Wrapper from "../assets/wrappers/RegisterAndLoginPage"
 import customFetch from "../utils/customFetch"
 import useValidateCredentials from "../hooks/useValidateCredentials"
@@ -40,11 +40,12 @@ const Register = () => {
         }
     }
 
+    const isSubmitting = state === 'submitting';
     return <Wrapper>
         <Form className='form' method="POST">
             <Logo />
             <h4>Register</h4>
-            { isCheckingUsername && <span className={ isUsernameInvalid ? 'invalid' : 'valid' }>{ usernameErrorMessage }</span> }
+            <ErrorText isChecking={ isCheckingUsername } isError={ isUsernameInvalid } errorMessage={ usernameErrorMessage } />
             <FormRow
                 label='name'
                 name='name'
@@ -72,8 +73,7 @@ const Register = () => {
                 required
                 className='form-input'
             />
-
-            { isCheckingPassword && <span className={ isPasswordInvalid ? 'invalid' : 'valid' }>{ passwordErrorMessage }</span> }
+            <ErrorText isChecking={ isCheckingPassword } isError={ isPasswordInvalid } errorMessage={ passwordErrorMessage } />
             <FormRow
                 label='password'
                 name='password'
@@ -84,13 +84,9 @@ const Register = () => {
                 className='form-input'
                 handlePassword={ handlePassword }
             />
-
-            <button type="submit"
-                className="btn btn-block"
-                disabled={ isUsernameInvalid || isPasswordInvalid || state === 'submitting' }
-            >
-                { state === 'submitting' ? 'Submitting ...' : 'Submit' }
-            </button>
+            <SubmitButton
+                isDisabled={ isUsernameInvalid || isPasswordInvalid || isSubmitting }
+                isSubmitting={ isSubmitting } />
             <p>
                 Already a member?
                 <Link to='/login' className="member-btn">Login</Link>
@@ -110,7 +106,8 @@ export const loader = async () => {
         }
         return null;
     } catch (error) {
-        toast.error("Error while checking user status, Pls Login")
+        const message = error.response?.data?.message || 'Failed to load user'
+        toast.error(message)
         return redirect('/login')
     }
 }
@@ -119,12 +116,12 @@ export const action = async ({ request, params }) => {
     const formData = await request.formData();
     const newUser = Object.fromEntries(formData)
     try {
-        const response = await customFetch.post('/auth/register', { ...newUser })
-        toast.success('Registration successful :)')
+        await customFetch.post('/auth/register', { ...newUser })
+        toast.success('Registration successful, Welcome to Jobify!')
         return redirect('/dashboard')
     } catch (error) {
-        toast.error('Registration failed :(')
-        console.log(error.response);
+        const message = error.response?.data?.message || 'Registration Failed :('
+        toast.error(message)
         return null;
     }
 }

@@ -1,4 +1,4 @@
-import { FormRow } from '../components';
+import { FileInput, FormRow, SubmitButton } from '../components';
 import Wrapper from '../assets/wrappers/DashboardFormPage';
 import { useNavigation, Form, } from 'react-router-dom';
 import { useDashboardContext } from './DashboardLayout';
@@ -15,18 +15,7 @@ const Profile = () => {
             <h4 className='form-title'>profile</h4>
 
             <div className='form-center'>
-                <div className='form-row'>
-                    <label htmlFor='image' className='form-label'>
-                        Select an image file (max 0.5 MB):
-                    </label>
-                    <input
-                        type='file'
-                        id='avatar'
-                        name='avatar'
-                        className='form-input'
-                        accept='image/*'
-                    />
-                </div>
+                <FileInput />
                 <FormRow
                     label='name'
                     type='text'
@@ -34,7 +23,6 @@ const Profile = () => {
                     className='form-input'
                     defaultValue={ user.name }
                 />
-
                 <FormRow
                     label='email'
                     type='email'
@@ -47,13 +35,8 @@ const Profile = () => {
                     name='location'
                     className='form-input'
                     defaultValue={ user.location } />
-                <button
-                    className='btn btn-block form-btn'
-                    type='submit'
-                    disabled={ isSubmitting }
-                >
-                    { isSubmitting ? 'submitting...' : 'save changes' }
-                </button>
+
+                <SubmitButton isSubmitting={ isSubmitting } isFormBtn />
             </div>
         </Form>
     </Wrapper>

@@ -32,13 +32,6 @@ app.use(cookieParser());
 if (process.env.NODE_ENV === 'development')
     app.use(morgan('dev'))
 
-// app.use((req, res, next) => {
-//     res.setHeader('Access-Control-Allow-Origin', '*');
-//     res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PATCH,DELETE,OPTIONS');
-//     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-//     next();
-// });
-
 try {
     await mongoose.connect(process.env.MONGO_URI || '');
     console.log('Connected to DB')

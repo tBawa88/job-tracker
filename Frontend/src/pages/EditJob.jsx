@@ -2,7 +2,7 @@ import { useParams, useNavigate, Form, redirect } from 'react-router-dom'
 import { useMutation, useQuery } from "@tanstack/react-query"
 import { queryClient } from "../utils/customFetch"
 import { editJob, fetchJob } from '../utils/httpHelpers'
-import { FormRow, FormSelect } from '../components';
+import { FormRow, FormSelect, SubmitButton } from '../components';
 import Wrapper from '../assets/wrappers/DashboardFormPage';
 import { toast } from 'react-toastify'
 import { JOB_STATUS, JOB_TYPE } from '../../../utils/constants';
@@ -82,13 +82,7 @@ const EditJob = () => {
                         defaultValue={ job?.jobType }
                         list={ Object.values(JOB_TYPE) }
                     />
-                    <button
-                        type='submit'
-                        className='btn btn-block form-btn '
-                        disabled={ isPending }
-                    >
-                        { isPending ? 'submitting...' : 'submit' }
-                    </button>
+                    <SubmitButton isFormBtn isSubmitting={ isPending } />
                 </div>
             </form>
         </Wrapper>

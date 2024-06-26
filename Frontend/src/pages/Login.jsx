@@ -1,6 +1,6 @@
 import { Link, Form, redirect, json } from "react-router-dom"
 import Wrapper from "../assets/wrappers/RegisterAndLoginPage"
-import { FormRow, Logo } from "../components"
+import { FormRow, Logo, SubmitButton } from "../components"
 import customFetch from "../utils/customFetch"
 import { toast } from "react-toastify"
 
@@ -61,7 +61,7 @@ export const action = async ({ request, params }) => {
         toast.success(`Welcome back, ${response.data.username}`)
         return redirect('/dashboard')
     } catch (error) {
-        const message = error.response.data.message || 'Error Loggin in'
+        const message = error.response?.data?.message || 'Error Loggin in'
         toast.error(message)
         return null
     }

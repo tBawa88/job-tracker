@@ -14,7 +14,6 @@ const validatePassword = async (req, res, next) => {
     const result = passwordSchema.safeParse(password);
     if (!result.success) {
         const erorrMessage = result.error.errors[0].message;
-        console.log('Error message of pasword ,', erorrMessage)
         return res.status(StatusCodes.IM_A_TEAPOT).json({ message: erorrMessage })
     }
 

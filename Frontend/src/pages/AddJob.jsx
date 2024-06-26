@@ -1,5 +1,5 @@
-import { useOutletContext, Form, useNavigation, useNavigate } from "react-router-dom"
-import { FormRow, FormSelect } from "../components";
+import { useOutletContext, useNavigate } from "react-router-dom"
+import { FormRow, FormSelect, SubmitButton } from "../components";
 import Wrapper from '../assets/wrappers/DashboardFormPage';
 import { useMutation } from "@tanstack/react-query";
 import { JOB_STATUS, JOB_TYPE, JOB_SORT_BY } from "../../../utils/constants";
@@ -9,9 +9,7 @@ import { toast } from "react-toastify";
 
 const AddJob = () => {
     const user = useOutletContext(); //we could also use useDashboardContext
-    const navigation = useNavigation();
     const navigate = useNavigate();
-    const isSubmitting = navigation.state === 'submitting';
     const { mutate, isPending, isError, error } = useMutation({
         mutationFn: createNewJob,
         onSuccess: () => {
@@ -67,13 +65,7 @@ const AddJob = () => {
                     name='jobStatus'
                     list={ Object.values(JOB_STATUS) }
                 />
-                <button
-                    type='submit'
-                    className='btn btn-block form-btn '
-                    disabled={ isPending }
-                >
-                    { isSubmitting ? 'submitting...' : 'submit' }
-                </button>
+                <SubmitButton isSubmitting={ isPending } isFormBtn />
             </div>
         </form>
     </Wrapper>
@@ -81,10 +73,9 @@ const AddJob = () => {
 export default AddJob
 
 
-
-export const action = async ({ request, params }) => {
-    // const formData = await request.formData();
-    // const newJob = Object.fromEntries(formData);
-    // console.log("New job data ", newJob)
-    return null
-}
+// export const action = async ({ request, params }) => {
+//     // const formData = await request.formData();
+//     // const newJob = Object.fromEntries(formData);
+//     // console.log("New job data ", newJob)
+//     return null
+// }
