@@ -1,11 +1,16 @@
-import { Link, Form, redirect, json } from "react-router-dom"
+import { Link, Form, redirect, useSubmit } from "react-router-dom"
 import Wrapper from "../assets/wrappers/RegisterAndLoginPage"
-import { FormRow, Logo, SubmitButton } from "../components"
+import { FormRow, Logo, LoginButton } from "../components"
 import customFetch from "../utils/customFetch"
 import { toast } from "react-toastify"
 
 
 const Login = () => {
+    const submit = useSubmit();
+    const handleExploreApp = () => {
+        submit({ intent: 'LOGIN-DEMO' }, { method: 'POST', action: '/login' })
+    }
+
     return <Wrapper>
         <Form className="form" method="POST">
             <Logo />
@@ -26,8 +31,11 @@ const Login = () => {
                 required
                 className='form-input'
             />
-            <button type="submit" className="btn btn-block">
+            <LoginButton value='LOGIN'>
                 Login
+            </LoginButton>
+            <button onClick={ handleExploreApp } className="btn btn-block">
+                Explore the app
             </button>
             <p>
                 Not a memeber yet?
@@ -55,14 +63,30 @@ export const loader = async () => {
 
 export const action = async ({ request, params }) => {
     const formData = await request.formData();
-    const user = Object.fromEntries(formData);
-    try {
-        const response = await customFetch.post('/auth/login', { ...user });
-        toast.success(`Welcome back, ${response.data.username}`)
-        return redirect('/dashboard')
-    } catch (error) {
-        const message = error.response?.data?.message || 'Error Loggin in'
-        toast.error(message)
-        return null
+    const intent = formData.get('intent')
+
+    switch (intent) {
+        case 'LOGIN':
+            const user = Object.fromEntries(formData);
+            try {
+                const response = await customFetch.post('/auth/login', { ...user });
+                toast.success(`Welcome back, ${response.data.username}`)
+                return redirect('/dashboard')
+            } catch (error) {
+                const message = error.response?.data?.message || 'Error Loggin in'
+                toast.error(message)
+                return null
+            }
+        case 'LOGIN-DEMO':
+            try {
+                await customFetch.post('/auth/login-demoUser');
+                toast.success('Welcome to a Demo Session')
+                return redirect('/dashboard')
+            } catch (error) {
+                console.log("Error ", error)
+                const message = error.response?.data?.messae || 'Error loggin in as Demo user'
+                toast.error(message)
+                return null;
+            }
     }
 }

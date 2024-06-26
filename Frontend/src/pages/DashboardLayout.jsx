@@ -1,4 +1,4 @@
-import { Outlet, redirect, useSubmit, } from "react-router-dom"
+import { Outlet, redirect, useSubmit, useFetcher } from "react-router-dom"
 import Wrapper from '../assets/wrappers/Dashboard'
 import { BigSidebar, SmallSidbar, Navbar } from "../components"
 import { useState, useEffect, createContext, useContext } from "react"
@@ -13,7 +13,7 @@ const DashboardContext = createContext();
 let firstMount = true;
 const ONE_DAY = 24 * 60 * 60 * 1000;
 const DashBoardLayout = () => {
-    const submit = useSubmit();
+    // const submit = useSubmit();
     useEffect(() => {
         if (!firstMount)
             return;
@@ -23,18 +23,24 @@ const DashBoardLayout = () => {
         }, ONE_DAY)
     });
 
+    let user, isTestUser;
+    const fetcher = useFetcher();
     const [showSidebar, setShowSidbar] = useState(false)
     const [isDarkTheme, setIsDarkTheme] = useState(checkDefaultTheme())
 
-    const { data: userData, } = useQuery({
+    const { data } = useQuery({
         queryKey: ['user'],
         queryFn: getCurrentUser,
         staleTime: 5000,
         onError: () => {
-            submit(null, { method: 'POST', action: '/logout' })
+            fetcher.submit(null, { method: 'POST', action: '/logout' })
         }
     })
-    const user = userData ? userData : { name: undefined };
+    if (data) {
+        user = data.user;
+        isTestUser = data.isTestUser;
+    }
+
     const toggleDarkTheme = () => {
         const newDarkTheme = !isDarkTheme;
         setIsDarkTheme(newDarkTheme);
@@ -47,7 +53,7 @@ const DashBoardLayout = () => {
         setShowSidbar(oldState => !oldState)
     }
     const logoutUser = async () => {
-        submit(null, { method: 'POST', action: '/logout' })
+        fetcher.submit(null, { method: 'POST', action: '/logout' })
     }
 
     return <Wrapper>
@@ -77,25 +83,24 @@ const DashBoardLayout = () => {
 }
 
 export const useDashboardContext = () => useContext(DashboardContext);
-export default DashBoardLayout
+export default DashBoardLayout;
 
-
+//checking if user is logged in before loading /dashboard
 export const loader = async () => {
     try {
         const response = await customFetch.get('/auth/status');
         if (!response.data.authenticated) {
             toast.error("User not Logged in", { autoClose: 2000 })
-            console.log("User not logged in")
             return redirect('/login')
         }
         return null;
     } catch (error) {
-        console.log("User not logged in")
         toast.error("Error while checking user status, Pls Login")
         return redirect('/login')
     }
 }
 
+//logout action
 export const action = async () => {
     try {
         await customFetch.post('/auth/logout');

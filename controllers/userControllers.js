@@ -7,13 +7,13 @@ import { formatImage } from "../middleware/multerMiddleware.js"
 
 export const getCurrentUser = async (req, res, next) => {
     const user = await User.findById(req.user.userId);
+    const isTestUser = req.user.userId === '667baa650b6089e13405abaa';  //mongo id of the test user
     const userWithoutPass = user.toJSON();
-    res.status(StatusCodes.OK).json({ success: true, user: userWithoutPass })
+    res.status(StatusCodes.OK).json({ success: true, user: userWithoutPass, isTestUser })
 }
 
 
-//after uploading the file, delete the image from disk storage
-//also delete the old image stored at cloudinary as well since it has no use anymore 
+//after uploading the file, delete it from the couldinary account using publicId
 export const updateUser = async (req, res, next) => {
     const newUser = { ...req.body };
     if (req.file) {

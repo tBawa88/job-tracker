@@ -117,7 +117,7 @@ export const action = async ({ request, params }) => {
     const newUser = Object.fromEntries(formData)
     try {
         await customFetch.post('/auth/register', { ...newUser })
-        toast.success('Registration successful, Welcome to Jobify!')
+        toast.success('Welcome to Jobify!')
         return redirect('/dashboard')
     } catch (error) {
         const message = error.response?.data?.message || 'Registration Failed :('

@@ -3,7 +3,8 @@ import customFetch from "./customFetch";
 export const getCurrentUser = async () => {
     try {
         const response = await customFetch.get('/users/current-user');
-        return response.data.user;
+        const { user, isTestUser } = response.data;
+        return { user, isTestUser };
     } catch (error) {
         console.log(error)
         const tempError = { message: 'Error while fetching the current user' }

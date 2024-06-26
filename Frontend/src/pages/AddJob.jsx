@@ -53,7 +53,6 @@ const AddJob = () => {
                     label='job location'
                     name='location'
                     className='form-input'
-                    defaultValue={ user.location }
                 />
                 <FormSelect
                     label='job type'

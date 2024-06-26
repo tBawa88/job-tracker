@@ -4,7 +4,7 @@ import links from "../utils/links"
 
 const Navlinks = ({ isBigSidebar }) => {
     const { toggleSidebar, user } = useDashboardContext();
-    const isAdmin = user.role === 'admin';
+    const isAdmin = user?.role === 'admin';
     return (
         <div className="nav-links">
             {

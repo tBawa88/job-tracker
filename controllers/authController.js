@@ -38,7 +38,6 @@ export const loginUser = async (req, res, next) => {
     return res.status(StatusCodes.OK).json({ success: true, message: 'User logged in successfully', username: user.name })
 }
 
-
 //simply clear the token from cookie
 export const logoutUser = async (req, res, next) => {
     res.cookie('token', 'logout', {
@@ -48,9 +47,23 @@ export const logoutUser = async (req, res, next) => {
     res.status(StatusCodes.OK).json({ msg: 'user logged out!' });
 }
 
+//login demo user
+export const loginDemoUser = async (req, res, next) => {
+    const user = await User.findOne({ name: 'IceCream' })
+    const token = generateToken({ userId: user._id, role: user.role })
+    res.cookie('token', token, {
+        httpOnly: true,
+        expires: new Date(Date.now() + ONE_DAY),
+        secure: process.env.NODE_ENV === 'production',
+    });
+    return res.status(StatusCodes.OK).json({ success: true, message: 'Demo user logged in' })
+}
+
+
 export const currentStatus = async (req, res, next) => {
     const { token } = req.cookies;
     if (!token)
         return res.status(StatusCodes.OK).json({ authenticated: false })
     res.status(StatusCodes.OK).json({ authenticated: true })
 }
+
