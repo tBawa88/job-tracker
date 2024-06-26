@@ -27,7 +27,9 @@ export const createNewJob = async (newJobData) => {
         const response = await customFetch.post('/jobs', newJobData);
         return response.data.job;
     } catch (error) {
-        console.log("Some error occured while crating a new job", error)
+        if (error.response.status === 403) {
+            throw { message: error.response.data.message || 'Could not perform the action' }
+        }
         throw { message: 'Error, could not create a new job. Try again later' }
     }
 }
@@ -46,6 +48,9 @@ export const editJob = async ({ updatedJobData, id }) => {
         const response = await customFetch.patch(`/jobs/${id}`, { ...updatedJobData })
         return response.data.job;
     } catch (error) {
+        if (error.response.status === 403) {
+            throw { message: error.response.data.message || 'Could not perform the action' }
+        }
         console.log("Error while updating the Job data")
         throw { message: 'Error, could not update this Job atm.' }
     }
@@ -53,9 +58,12 @@ export const editJob = async ({ updatedJobData, id }) => {
 
 export const delteJob = async ({ id }) => {
     try {
-        const response = await customFetch.delete(`/jobs/${id}`)
+        await customFetch.delete(`/jobs/${id}`)
         return null;
     } catch (error) {
+        if (error.response.status === 403) {
+            throw { message: error.response.data.message || 'Could not perform the action' }
+        }
         console.log("Error while deleting the jobid", id)
         throw { message: 'Error, could not delete the Job atm.' }
     }

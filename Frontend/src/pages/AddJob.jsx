@@ -20,8 +20,9 @@ const AddJob = () => {
             toast.success('New Job created!', { autoClose: 2000 })
             navigate('/dashboard/all-jobs');
         },
-        onError: () => {
-            toast.error('Error, could not create a new Job', { autoClose: 1000 })
+        onError: (data) => {
+            const message = data?.message || 'Error Creating a new Job'
+            toast.error(message, { autoClose: 2000 })
         }
     })
 

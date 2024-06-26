@@ -1,13 +1,13 @@
 import { StatusCodes } from "http-status-codes"
 import User from "../models/User.js"
 import Job from "../models/Job.js"
-import 'express-async-errors'
 import { v2 as cloudinary } from 'cloudinary'
 import { formatImage } from "../middleware/multerMiddleware.js"
+import 'express-async-errors'
 
 export const getCurrentUser = async (req, res, next) => {
     const user = await User.findById(req.user.userId);
-    const isTestUser = req.user.userId === '667baa650b6089e13405abaa';  //mongo id of the test user
+    const isTestUser = req.user.userId === '667baa650b6089e13405abaa';  //mongo id of the demo acc. user
     const userWithoutPass = user.toJSON();
     res.status(StatusCodes.OK).json({ success: true, user: userWithoutPass, isTestUser })
 }

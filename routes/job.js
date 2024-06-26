@@ -3,12 +3,14 @@ const router = Router();
 import validateJob from "../middleware/validateJob.js";
 import validateIdAndOwner from "../middleware/validateJobId.js";
 import checkUserLoggedIn from "../middleware/checkAuth.js";
+import checkDemoUser from "../middleware/checkDemoUser.js";
 import {
     getAllJobs,
     getJob,
     createJob,
     editJob,
-    deletejob
+    deletejob,
+    showStats
 } from '../controllers/jobController.js'
 
 
@@ -16,17 +18,17 @@ import {
 //every route handler here, will have access to req.user = {userId, role}
 router.use(checkUserLoggedIn);
 
-router.get('/', getAllJobs)
+router.route('/')
+    .get(getAllJobs)
+    .post(checkDemoUser, validateJob, createJob)
 
-router.get('/:id', validateIdAndOwner, getJob)
+router.get('/get-stats', showStats);
+
+router.route('/:id')
+    .get(validateIdAndOwner, getJob)
+    .patch(checkDemoUser, validateIdAndOwner, validateJob, editJob)
+    .delete(checkDemoUser, validateIdAndOwner, deletejob)
 
 
-
-router.post('/', validateJob, createJob)
-
-
-router.patch('/:id', validateIdAndOwner, validateJob, editJob)
-
-router.delete('/:id', validateIdAndOwner, deletejob)
 
 export default router

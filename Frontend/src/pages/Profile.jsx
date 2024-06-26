@@ -58,6 +58,10 @@ export const action = async ({ request }) => {
         queryClient.invalidateQueries({ queryKey: ['user'] })
     } catch (error) {
         const message = error?.response?.data?.message || 'Something went wrong while updating user info'
+        if (error.response.status === 403) {
+            toast.error(message)
+            return null;
+        }
         toast.error(message)
     }
     return null;

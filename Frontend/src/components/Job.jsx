@@ -25,14 +25,16 @@ const Job = ({
     const date = day(createdAt).format('MMM Do, YYYY');
     const { mutate } = useMutation({
         mutationFn: delteJob,
+        //optimistic state updation, and rollback on error :)
         onMutate: async () => {
             const oldData = queryClient.getQueryData(['user', { jobId: _id }]);
             await queryClient.cancelQueries({ queryKey: ['user', { jobId: _id }] })
             queryClient.removeQueries({ queryKey: ['user', { jobId: _id }] })
             return { oldData };
         },
-        onError: (data, erorr, context) => {
-            toast.error('Error deleting the Job', { autoClose: 2000 })
+        onError: (data, error, context) => {
+            const message = data?.message || 'Error Creating a new Job'
+            toast.error(message, { autoClose: 1500 })
             queryClient.setQueryData(['user', { jobId: _id }], context.oldData)
         },
         onSuccess: () => {

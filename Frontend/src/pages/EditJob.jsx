@@ -20,15 +20,18 @@ const EditJob = () => {
         staleTime: 2000,
     })
 
+    //optimistic caching of data and rollback on error
     const { mutate } = useMutation({
         mutationFn: editJob,
-        onMutate: async ({ updatedJobData }) => {   //optimistic cache update
+        onMutate: async ({ updatedJobData }) => {
             const oldJobData = queryClient.getQueryData(['user', { jobId: id }]);
             await queryClient.cancelQueries({ queryKey: ['user', { jobId: id }] })
             queryClient.setQueryData(['user', { jobId: id }], updatedJobData)
             return { oldJobData }
         },
-        onError: (data, error, context) => {   //rollback the updated data
+        onError: (data, error, context) => {
+            const message = data?.message || 'Error Creating a new Job'
+            toast.error(message, { autoClose: 1500 })
             queryClient.setQueryData(['user', { jobId: id }], context.oldJobData)
         },
         onSettled: () => {
