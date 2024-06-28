@@ -22,7 +22,6 @@ const AllJobs = () => {
 
     return (
         <>
-            <h4>AllJobs</h4>
             <SearchContainer />
             { content }
         </>

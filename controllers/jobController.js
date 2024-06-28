@@ -14,8 +14,26 @@ export const createJob = async (req, res, next) => {
 }
 
 export const getAllJobs = async (req, res, next) => {
-    const jobs = await Job.find({ ownerId: req.user.userId });
-    res.status(StatusCodes.OK).json({ success: true, message: "Successfully fetched all jobs", jobs })
+    console.log("Tryna search for this", req.query)
+    const { search = '', jobStatus = '', jobType = '', sort = 'newest' } = req.query;
+    const searchObject = {
+        ...(search && { company: { $regex: search, $options: 'i' } }),
+        ...(jobStatus && jobStatus !== 'all' && { jobStatus }),
+        ...(jobType && jobType !== 'all' && { jobType }),
+    }
+    let sortCriteria = { createdAt: -1 };
+    if (sort === 'newest') {
+        sortCriteria = { createdAt: -1 };
+    } else if (sort === 'oldest') {
+        sortCriteria = { createdAt: 1 };
+    } else if (sort === 'a-z') {
+        sortCriteria = { company: 1 };
+    } else if (sort === 'z-a') {
+        sortCriteria = { company: -1 };
+    }
+
+    const jobs = await Job.find({ ownerId: req.user.userId, ...searchObject }).sort(sortCriteria)
+    res.status(200).json({ title: "GOOD", jobs })
 }
 
 export const getJob = async (req, res, next) => {
@@ -72,7 +90,7 @@ export const getStats = async (req, res, next) => {
 
     monthlyJobStats = monthlyJobStats.map((item) => {
         const { _id: { year, month }, count } = item
-        const date = day().month(month - 1).year(year).format('MMM YY') //obtaining a data string 'Jun 24, May 24'
+        const date = day().month(month - 1).year(year).format('MMM YY') //this will return 'Jun 24, May 24' type string
         //month-1 is done because dayjs months start form 0 
         return { date, count }
     })
