@@ -68,3 +68,14 @@ export const delteJob = async ({ id }) => {
         throw { message: 'Error, could not delete the Job atm.' }
     }
 }
+
+export const fetchJobStats = async () => {
+    try {
+        const response = await customFetch.get('/jobs/get-stats');
+        const { totalJobStats, monthlyJobStats } = response.data;
+        return { totalJobStats, monthlyJobStats }
+    } catch (error) {
+        console.log("Error occured while fetching stats,", error)
+        throw { message: error.message || 'Failed to fetch stats' }
+    }
+}

@@ -14,7 +14,7 @@ const AddJob = () => {
         mutationFn: createNewJob,
         onSuccess: () => {
             queryClient.invalidateQueries({
-                queryKey: ['jobs, user'],
+                queryKey: ['jobs', 'user', 'stats'],
                 refetchType: "all"
             })
             toast.success('New Job created!', { autoClose: 2000 })

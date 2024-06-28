@@ -39,14 +39,14 @@ const Job = ({
         },
         onSuccess: () => {
             queryClient.invalidateQueries({
-                queryKey: ['user', 'jobs'],
+                queryKey: ['user', 'jobs', 'stats'],
                 refetchType: 'all'
             })
             toast.warning('Job deleted', { autoClose: 2000 })
         },
         onSettled: () => {
             queryClient.invalidateQueries({
-                queryKey: ['user', 'jobs'],
+                queryKey: ['user', 'jobs', 'stats'],
                 refetchType: 'all'
             })
         }

@@ -1,7 +1,7 @@
 import Job from "../models/Job.js";
 import { StatusCodes } from 'http-status-codes'
-import day from 'dayjs';
 import mongoose from "mongoose";
+import day from 'dayjs';
 import 'express-async-errors'
 
 
@@ -38,16 +38,45 @@ export const deletejob = async (req, res, next) => {
 
 }
 
-export const showStats = async (req, res, next) => {
-    const defaultData = {
-        pending: 22,
-        interview: 11,
-        declined: 8
+export const getStats = async (req, res, next) => {
+    //for a specific user, group by jobStatus and count total rows(documents)
+    let stats = await Job.aggregate([
+        { $match: { ownerId: new mongoose.Types.ObjectId(req.user.userId) } },
+        { $group: { _id: '$jobStatus', count: { $sum: 1 } } }
+    ])
+
+    //reducing an array of 3 objects into a single object with 3 properties
+    stats = stats.reduce((acc, stat) => {
+        const { _id, count } = stat;
+        acc[_id] = count;
+        return acc;
+    }, {})
+    const totalJobStats = {
+        pending: stats.pending || 0,
+        interview: stats.interview || 0,
+        declined: stats.declined || 0
     }
-    const monthlyData = [
-        { date: 'May 23', count: 12 },
-        { date: 'June 23', count: 20 },
-        { date: 'July 23', count: 15 },
-    ]
-    res.status(StatusCodes.OK).json({ defaultData, monthlyData })
+
+    //group by monthly data, looking for count jobs created in last 6 months 
+    let monthlyJobStats = await Job.aggregate([
+        { $match: { ownerId: new mongoose.Types.ObjectId(req.user.userId) } },
+        {
+            $group: {
+                _id: { year: { $year: '$createdAt' }, month: { $month: '$createdAt' } },
+                count: { $sum: 1 }
+            }
+        },
+        { $sort: { '_id.year': -1, '_id.month': -1 } },
+        { $limit: 6 }
+    ])
+
+    monthlyJobStats = monthlyJobStats.map((item) => {
+        const { _id: { year, month }, count } = item
+        const date = day().month(month - 1).year(year).format('MMM YY') //obtaining a data string 'Jun 24, May 24'
+        //month-1 is done because dayjs months start form 0 
+        return { date, count }
+    })
+
+    res.status(StatusCodes.OK).json({ totalJobStats, monthlyJobStats })
 }
+

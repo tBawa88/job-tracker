@@ -27,6 +27,7 @@ const EditJob = () => {
             const oldJobData = queryClient.getQueryData(['user', { jobId: id }]);
             await queryClient.cancelQueries({ queryKey: ['user', { jobId: id }] })
             queryClient.setQueryData(['user', { jobId: id }], updatedJobData)
+            toast.success("Job Edited", { autoClose: 1500 })
             return { oldJobData }
         },
         onError: (data, error, context) => {

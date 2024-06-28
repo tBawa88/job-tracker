@@ -10,7 +10,7 @@ import {
     createJob,
     editJob,
     deletejob,
-    showStats
+    getStats
 } from '../controllers/jobController.js'
 
 
@@ -22,7 +22,7 @@ router.route('/')
     .get(getAllJobs)
     .post(checkDemoUser, validateJob, createJob)
 
-router.get('/get-stats', showStats);
+router.get('/get-stats', getStats);
 
 router.route('/:id')
     .get(validateIdAndOwner, getJob)
