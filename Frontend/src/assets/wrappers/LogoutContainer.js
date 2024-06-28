@@ -19,7 +19,7 @@ const Wrapper = styled.div`
   top: 40px;
   left: 0;
   width: 100%;
-  margin-top: 0.75rem;
+  margin-top: 0.3rem;
   text-align: center;
   visibility: hidden;
   box-shadow: var(--shadow-2);
