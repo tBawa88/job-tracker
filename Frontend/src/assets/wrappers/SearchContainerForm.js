@@ -33,6 +33,14 @@ const Wrapper = styled.section`
     font-size: 1rem;
     line-height: 1.5;
 }
+.form-select options {
+    padding : 0.5rem
+}
+  #filter-btn {
+    margin-top: -1rem;
+    margin-bottom: 1rem;
+  }
+
   @media (min-width: 992px) {
     .form-center {
       grid-template-columns: 1fr 1fr;

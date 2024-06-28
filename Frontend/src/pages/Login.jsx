@@ -1,6 +1,6 @@
 import { Link, Form, redirect, useSubmit } from "react-router-dom"
 import Wrapper from "../assets/wrappers/RegisterAndLoginPage"
-import { FormRow, Logo, LoginButton } from "../components"
+import { FormRowDebounced, Logo, LoginButton } from "../components"
 import customFetch from "../utils/customFetch"
 import { toast } from "react-toastify"
 
@@ -15,7 +15,7 @@ const Login = () => {
         <Form className="form" method="POST">
             <Logo />
             <h4>Login</h4>
-            <FormRow
+            <FormRowDebounced
                 label='email'
                 name='email'
                 type='email'
@@ -23,7 +23,7 @@ const Login = () => {
                 required
                 className='form-input'
             />
-            <FormRow
+            <FormRowDebounced
                 label='password'
                 name='password'
                 type='password'

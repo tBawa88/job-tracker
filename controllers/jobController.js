@@ -3,7 +3,7 @@ import { StatusCodes } from 'http-status-codes'
 import mongoose from "mongoose";
 import day from 'dayjs';
 import 'express-async-errors'
-
+import { getMatchStage, getSortStage } from '../utils/fetchJobsUtils.js'
 
 export const createJob = async (req, res, next) => {
     const { userId } = req.user;
@@ -14,25 +14,12 @@ export const createJob = async (req, res, next) => {
 }
 
 export const getAllJobs = async (req, res, next) => {
-    console.log("Tryna search for this", req.query)
-    const { search = '', jobStatus = '', jobType = '', sort = 'newest' } = req.query;
-    const searchObject = {
-        ...(search && { company: { $regex: search, $options: 'i' } }),
-        ...(jobStatus && jobStatus !== 'all' && { jobStatus }),
-        ...(jobType && jobType !== 'all' && { jobType }),
-    }
-    let sortCriteria = { createdAt: -1 };
-    if (sort === 'newest') {
-        sortCriteria = { createdAt: -1 };
-    } else if (sort === 'oldest') {
-        sortCriteria = { createdAt: 1 };
-    } else if (sort === 'a-z') {
-        sortCriteria = { company: 1 };
-    } else if (sort === 'z-a') {
-        sortCriteria = { company: -1 };
-    }
+    const { company = '', position = '', jobStatus = '', jobType = '', sort = 'newest' } = req.query;
 
-    const jobs = await Job.find({ ownerId: req.user.userId, ...searchObject }).sort(sortCriteria)
+    const matchStage = getMatchStage(req.user.userId, position, company, jobStatus, jobType);
+    const sortStage = getSortStage(sort)
+
+    const jobs = await Job.aggregate([matchStage, sortStage])
     res.status(200).json({ title: "GOOD", jobs })
 }
 

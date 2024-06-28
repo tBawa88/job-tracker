@@ -1,5 +1,5 @@
 import { Link, Form, redirect, useNavigation } from "react-router-dom"
-import { Logo, FormRow, SubmitButton, ErrorText } from "../components"
+import { Logo, FormRowDebounced, SubmitButton, ErrorText } from "../components"
 import Wrapper from "../assets/wrappers/RegisterAndLoginPage"
 import customFetch from "../utils/customFetch"
 import useValidateCredentials from "../hooks/useValidateCredentials"
@@ -46,7 +46,7 @@ const Register = () => {
             <Logo />
             <h4>Register</h4>
             <ErrorText isChecking={ isCheckingUsername } isError={ isUsernameInvalid } errorMessage={ usernameErrorMessage } />
-            <FormRow
+            <FormRowDebounced
                 label='name'
                 name='name'
                 type='text'
@@ -56,7 +56,7 @@ const Register = () => {
                 className='form-input'
                 handleUsername={ handleUsername }
             />
-            <FormRow
+            <FormRowDebounced
                 label='email'
                 name='email'
                 type='email'
@@ -64,7 +64,7 @@ const Register = () => {
                 required
                 className='form-input'
             />
-            <FormRow
+            <FormRowDebounced
                 label='location'
                 name='location'
                 type='location'
@@ -74,7 +74,7 @@ const Register = () => {
                 className='form-input'
             />
             <ErrorText isChecking={ isCheckingPassword } isError={ isPasswordInvalid } errorMessage={ passwordErrorMessage } />
-            <FormRow
+            <FormRowDebounced
                 label='password'
                 name='password'
                 type='password'
