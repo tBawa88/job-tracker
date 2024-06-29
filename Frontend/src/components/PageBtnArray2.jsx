@@ -14,9 +14,14 @@ const PageBtnArray = ({ pageArray, currentPage, lastPage, onPageChange }) => {
     )
 
     /**
-     * At any given time there can be at max be 7 buttons on the screen. The first, last, active , one before, one after , and 2 elipsis buttons
-     * And at minimum there can be 4 buttons. The first, last, one either after First or before last, and one elipsisis button
-     * So it is easier to manually construct an array of buttons depending on currentPage  
+     * Think in terms of a QUEUE data structure and consider the following conditions
+     * -First in the queue is the 'First' button, always there no matter what
+     * -After First comes the left elipsis button, the condition for that is the current page must be more than 3
+     * -After that comes the 'One before current' button, condition for that is current !== 1 && !== 2 (if it's 2 then 1 is always visible anyways)
+     * -After that comes 'current' button, condition for that current !== first and !== last (since they're always rendered no matter what)
+     * -Next is queue is the 'One after current' button, condition for that is current !== last and !== last - 1
+     * -Then comes the right elipsis button, which should only be rendered if current is less than last - 1
+     * -Finally the last button, which is always rendered
      * 
      * @returns {[JSX.Element]} An array of `<button>` JSX elements to be rendered on screen
      */
@@ -46,8 +51,6 @@ const PageBtnArray = ({ pageArray, currentPage, lastPage, onPageChange }) => {
 
         //last button
         pages.push(addPage({ pageValue: lastPage, active: currentPage === lastPage }))
-
-
         return pages;
     }
 
