@@ -39,3 +39,25 @@ export const getMatchStage = (_id, position, company, jobStatus, jobType) => {
     }
     return matchStage
 }
+
+/**
+ * 
+ * @param {string} _id - mongoose id of current user
+ * @param {string} position - Value of position query string
+ * @param {string} company - Value of company query string
+ * @param {string} jobStatus - Value of jobStatus query string
+ * @param {string} jobType - Value of jobType query string
+ * @returns An object that can be used to filter the results and count the result queries 
+ */
+export const getQueryObject = (_id, position, company, jobStatus, jobType) => {
+    const queryObject = {
+        ownerId: _id,
+        ...(position && { position: { $regex: position, $options: 'i' } }),
+        ...(company && { company: { $regex: company, $options: 'i' } }),
+        ...(jobStatus && jobStatus !== 'all' && { jobStatus }),
+        ...(jobType && jobType !== 'all' && { jobType })
+    }
+
+
+    return queryObject
+}

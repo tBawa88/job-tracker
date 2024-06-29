@@ -1,15 +1,15 @@
-import { FormRowDebounced, FormSelect } from '../components'
-
+import { FormRowDebounced, FormSelect } from '.'
+import { useJobsContext } from '../pages/AllJobs'
 import Wrapper from '../assets/wrappers/SearchContainerForm'
 import { useRef } from 'react'
-const jobStatusList = ['all', 'pending', 'interview', 'declined']
-const jobTypeList = ['all', 'full-time', 'part-time', 'intern']
-const sortList = ['newest', 'oldest', 'a-z', 'z-a']
+import { JOB_STATUS, JOB_TYPE, SORT_LIST } from '../utils/filterFormContants'
 
 
-
-const SearchContainer = ({ filterAllJobs }) => {
+const SearchFormContainer = () => {
+    const { filterAllJobs } = useJobsContext();
     const formRef = useRef()
+
+
     const handleFilter = () => {
         const formData = new FormData(formRef.current);
         const formValues = Object.fromEntries(formData)
@@ -49,21 +49,21 @@ const SearchContainer = ({ filterAllJobs }) => {
                     <FormSelect
                         name='jobStatus'
                         label='job status'
-                        list={ jobStatusList }
+                        list={ JOB_STATUS }
                         handleFilter={ handleFilter } />
                     <FormSelect
                         name='jobType'
                         label='job status'
-                        list={ jobTypeList }
+                        list={ JOB_TYPE }
                         handleFilter={ handleFilter } />
                     <FormSelect
                         name='sort'
                         label='sort by'
-                        list={ sortList }
+                        list={ SORT_LIST }
                         handleFilter={ handleFilter } />
                 </div>
             </form>
         </Wrapper>
     )
 }
-export default SearchContainer
+export default SearchFormContainer

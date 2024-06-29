@@ -5588,6 +5588,15 @@ export const getAllJobs = async (req, res) => {
   if (jobType && jobType !== 'all') {
     queryObject.jobType = jobType;
   }
+     // const queryObject = { ownerId: _id ,};
+    // if (position) 
+    //     queryObject.position = { $regex: position, $options: 'i' }
+    // if (company)
+    //     queryObject.company = { $regex: company, $options: 'i' }
+    // if (jobStatus && jobStatus !== 'all') 
+    //     queryObject.jobStatus = jobStatus;
+    // if (jobType && jobType !== 'all') 
+    //     queryObject.jobType = jobType;
 
   const sortOptions = {
     newest: '-createdAt',

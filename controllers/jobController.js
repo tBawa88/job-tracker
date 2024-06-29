@@ -3,7 +3,7 @@ import { StatusCodes } from 'http-status-codes'
 import mongoose from "mongoose";
 import day from 'dayjs';
 import 'express-async-errors'
-import { getMatchStage, getSortStage } from '../utils/fetchJobsUtils.js'
+import { getMatchStage, getQueryObject, getSortStage } from '../utils/fetchJobsUtils.js'
 
 export const createJob = async (req, res, next) => {
     const { userId } = req.user;
@@ -14,13 +14,21 @@ export const createJob = async (req, res, next) => {
 }
 
 export const getAllJobs = async (req, res, next) => {
-    const { company = '', position = '', jobStatus = '', jobType = '', sort = 'newest' } = req.query;
+    const { company = '', position = '', jobStatus = '', jobType = '', sort = 'newest', pg = '1' } = req.query;
 
     const matchStage = getMatchStage(req.user.userId, position, company, jobStatus, jobType);
     const sortStage = getSortStage(sort)
+    const queryObject = getQueryObject(req.user.userId, position, company, jobStatus, jobType)
+    //set up pagination limit and skip
+    const limit = 10;
+    const skip = (parseInt(pg) - 1) * limit;
 
-    const jobs = await Job.aggregate([matchStage, sortStage])
-    res.status(200).json({ title: "GOOD", jobs })
+    const jobs = await Job.aggregate([matchStage, sortStage]).skip(skip).limit(limit)
+    const totalJobsFound = await Job.countDocuments(queryObject)
+    const currentPage = Math.floor(skip / 10) + 1
+    const totalPages = Math.ceil(totalJobsFound / 10)
+
+    res.status(200).json({ totalJobsFound, totalPages, currentPage, jobs })
 }
 
 export const getJob = async (req, res, next) => {

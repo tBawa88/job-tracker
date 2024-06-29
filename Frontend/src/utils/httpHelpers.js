@@ -14,10 +14,10 @@ export const getCurrentUser = async () => {
 
 export const fetchAllJobs = async (queryStrings) => {
     const searchParams = new URLSearchParams(queryStrings).toString()
-    // console.log("Inside fetchalljobs, current search params", searchParams)
+    console.log("cuurent search params are  ", searchParams)
     try {
         const response = await customFetch.get(`/jobs?${searchParams}`);
-        return response.data.jobs;
+        return response.data;
     } catch (error) {
         // console.log("Some error occured while fetching All jobs", error)
         throw { message: 'Error, could not fetch jobs' }
