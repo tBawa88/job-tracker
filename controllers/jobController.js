@@ -25,7 +25,8 @@ export const getAllJobs = async (req, res, next) => {
 
     const jobs = await Job.aggregate([matchStage, sortStage]).skip(skip).limit(limit)
     const totalJobsFound = await Job.countDocuments(queryObject)
-    const currentPage = Math.floor(skip / 10) + 1
+
+    const currentPage = (skip / 10) + 1
     const totalPages = Math.ceil(totalJobsFound / 10)
 
     res.status(200).json({ totalJobsFound, totalPages, currentPage, jobs })
