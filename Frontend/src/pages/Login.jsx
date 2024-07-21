@@ -34,7 +34,7 @@ const Login = () => {
             <LoginButton value='LOGIN'>
                 Login
             </LoginButton>
-            <button onClick={ handleExploreApp } className="btn btn-block">
+            <button onClick={ handleExploreApp } className="btn btn-block" type="button">
                 Explore the app
             </button>
             <p>
